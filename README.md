@@ -1,5 +1,7 @@
 # AI Face Detection & Tracking
 
+Link: https://face-detection-tracking.streamlit.app/
+
 ## Project overview
 
 Academic Python application for detecting human faces in images and videos,
