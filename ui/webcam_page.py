@@ -7,10 +7,19 @@ from threading import Lock
 from time import monotonic
 from typing import Callable
 
-import av
 import cv2
 import streamlit as st
-from streamlit_webrtc import WebRtcMode, VideoProcessorBase, webrtc_streamer
+
+try:
+    import av
+    from streamlit_webrtc import WebRtcMode, VideoProcessorBase, webrtc_streamer
+    _WEBRTC_IMPORT_ERROR: ImportError | None = None
+except ImportError as error:
+    av = None
+    WebRtcMode = None
+    webrtc_streamer = None
+    VideoProcessorBase = object
+    _WEBRTC_IMPORT_ERROR = error
 
 import config
 from detector import FaceDetector
@@ -116,6 +125,12 @@ class WebcamVideoProcessor(VideoProcessorBase):
 
 def render() -> None:
     page_header("Live Webcam", "Flux temps réel intégré dans Streamlit avec WebRTC.")
+    if _WEBRTC_IMPORT_ERROR is not None:
+        st.error(
+            "La webcam WebRTC est indisponible dans cet environnement. "
+            f"Dépendance manquante ou incompatible : {_WEBRTC_IMPORT_ERROR}"
+        )
+        return
     st.info(
         "Autorisez l'accès caméra dans votre navigateur. Sur un déploiement distant, "
         "utilisez HTTPS ou localhost ; les frames sont traitées localement par cette session."
@@ -144,4 +159,3 @@ def render() -> None:
             st.error(f"Erreur de traitement webcam : {stats.error}")
     elif context.state.playing:
         st.warning("Initialisation du processeur webcam…")
-
