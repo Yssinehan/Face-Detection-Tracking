@@ -78,8 +78,9 @@ The local webcam uses an OpenCV window and stops with `Q`.
 
 For Streamlit Community Cloud, the repository pins Python 3.11 in
 `runtime.txt` and uses `opencv-python-headless` for the Linux server
-environment. After changing dependencies, use **Reboot app** or **Clear cache
-and reboot** in the Cloud app settings.
+environment. The `packages.txt` file supplies the small Linux runtime
+libraries required by OpenCV and MediaPipe. After changing dependencies, use
+**Reboot app** or **Clear cache and reboot** in the Cloud app settings.
 
 ### Application guide
 
